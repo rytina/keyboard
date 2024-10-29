@@ -79,6 +79,7 @@ func getKeyEvent(r *k32_event) (KeyEvent, bool) {
 	}
 
 	ctrlPressed := r.control_key_state&(left_ctrl_pressed|right_ctrl_pressed) != 0
+	altGrPressed := r.control_key_state&right_alt_pressed != 0
 
 	if r.virtual_key_code >= vk_f1 && r.virtual_key_code <= vk_f12 {
 		switch r.virtual_key_code {
@@ -187,6 +188,17 @@ func getKeyEvent(r *k32_event) (KeyEvent, bool) {
 		}
 
 		if e.Key != 0 {
+			return e, true
+		}
+	}
+
+	if altGrPressed {
+		switch r.virtual_key_code {
+		case 55:
+			e.Rune = '{'
+			return e, true
+		case 56:
+			e.Rune = '['
 			return e, true
 		}
 	}
